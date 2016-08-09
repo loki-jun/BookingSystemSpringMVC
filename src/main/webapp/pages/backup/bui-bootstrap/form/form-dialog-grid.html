@@ -1,0 +1,198 @@
+﻿<!DOCTYPE HTML>
+<html>
+ <head>
+  <title> 表格跟弹出框联动</title>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+       <link href="../assets/css/dpl-min.css" rel="stylesheet" type="text/css" />
+    <link href="../assets/css/bui-min.css" rel="stylesheet" type="text/css" />
+    <link href="../assets/css/page-min.css" rel="stylesheet" type="text/css" />   <!-- 下面的样式，仅是为了显示代码，而不应该在项目中使用-->
+   <link href="../assets/css/prettify.css" rel="stylesheet" type="text/css" />
+   <style type="text/css">
+    code {
+      padding: 0px 4px;
+      color: #d14;
+      background-color: #f7f7f9;
+      border: 1px solid #e1e1e8;
+    }
+   </style>
+ </head>
+ <body>
+  
+  <div class="container">
+     <form id ="J_Form" class="form-horizontal" method="post">
+      <!--    -->
+      <h3>基本信息</h3>
+      <div class="row">
+        <div class="control-group span12">
+          <label class="control-label">姓名：</label>
+          <div class="controls">
+            <input name="sname" type="text" class="control-text" data-rules="{required:true}">
+          </div>
+        </div>
+        <div class="control-group span12">
+          <label class="control-label">学号/工号：</label>
+          <div class="controls">
+            <input name="sid" type="text" class="control-text" data-rules="{required:true}">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="control-group span12">
+          <label class="control-label">性别：</label>
+          <div class="controls">
+            <select name="sex">
+              <option value="0">男</option>
+              <option value="1">女</option>
+            </select>
+          </div>
+        </div>
+        <div class="control-group12 span12">
+          <label class="control-label">USTC邮箱：</label>
+          <div class="controls">
+            <input name="sid" type="text" class="control-text" data-rules="{required:true}">
+          </div>
+        </div>
+         <div class="row">
+        <div class="form-actions offset3"> 
+          <button type="submit" class="button button-primary">保存</button>
+        </div>
+      </div>
+          
+      </form>
+       <form id ="J_Form" class="form-horizontal" method="get">
+      <hr/>
+      <h3>我的信誉</h3>
+      <div class="row">
+        <div class="control-group span24">
+          <label class="control-label">信誉度：</label>
+          <div class="controls">
+            <onput type="text" class="control-text span8 span-width"  data-rules="{required:true}">
+          </div>
+        </div>
+        
+      </div>
+      <div class="row">
+        <div class="control-group span24">
+          <label class="control-label">爽约记录：</label>
+          <div class="controls">
+            <onput type="text" class="control-text span8 span-width"  data-rules="{required:true}">
+          </div>
+        </div>
+        
+      </div>
+      
+      <hr/>
+
+      <h3>我的预约</h3>
+      <div class="row">
+        <div class="span21 offset3 control-row-auto">
+          <div id="grid"></div>
+          <onput type="hidden" name="eduation">
+        </div>
+      </div>
+      </form>
+      
+     
+   
+    
+  <script type="text/javascript" src="../assets/js/jquery-1.8.1.min.js"></script>
+  <script type="text/javascript" src="../assets/js/bui-min.js"></script>
+
+  <script type="text/javascript" src="../assets/js/config-min.js"></script>
+  <script type="text/javascript">
+    BUI.use('common/page');
+  </script>
+
+  <!-- 仅仅为了显示代码使用，不要在项目中引入使用-->
+  <script type="text/javascript" src="../assets/js/prettify.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      prettyPrint();
+    });
+  </script> 
+<script type="text/javascript">
+  BUI.use(['bui/grid','bui/data','bui/form'],function (Grid,Data,Form) {
+
+    var columns = [{title : '场馆名称',dataIndex :'school'},
+            {title : '操作日期',dataIndex :'enter'},
+            {title : '预约日期',dataIndex :'outter'},
+            {title : '场地序号',dataIndex :'memo',width:200},
+            
+          ],
+      //默认的数据
+      data = [
+        {id:'1',school:'武汉第一初级中学',enter:'1999-09-01',type: 'zou',outter:'2002-07-01',memo:'表现优异，多次评为三好学生'},
+        {id:'2',school:'武汉第一高级中学',enter:'2002-09-01',type: 'zou',outter:'2005-07-01',memo:'表现优异，多次评为三好学生'}
+      ],
+      store = new Data.Store({
+        data:data
+      }),
+//      $.ajax({
+//            type: "Post",
+//            url: "./WebService1.asmx/getInfo",  /jsoncallback=?",
+//            beforeSend: function (request) {
+//                request.setRequestHeader("ID", parent.ContextId);
+//            },
+//            data: "{'DLXXDLZH':'12201010303'}",  //
+//            contentType: "application/json;charset=utf-8", // 这句可不要忘了。
+//            dataType: "json", //json",
+//            success: function (result) {
+//                var projects = eval('(' + result.d + ')');
+
+//            store = new Data.Store({
+//            data:data
+//            },
+//            error: function (x, e) {
+//                alert(x.responseText);
+//            }
+//        });
+//    }
+
+      editing = new Grid.Plugins.DialogEditing({
+          contentId: 'content',
+          triggerCls: 'btn-edit',
+          eidtor: {
+              focusable: false
+          }
+      }),
+      grid = new Grid.Grid({
+        render : '#grid',
+        columns : columns,
+        width : 700,
+        forceFit : true,
+        store : store,
+        plugins : [Grid.Plugins.CheckSelection,editing],
+        tbar:{
+          items : [
+          {
+            btnCls : 'button button-small',
+            text : '<i class="icon-remove"></i>删除',
+            listeners : {
+              'click' : delFunction
+            }
+          }]
+        }
+
+      });
+    grid.render();
+
+   
+
+    function delFunction(){
+      var selections = grid.getSelection();
+      store.remove(selections);
+    }
+    var form = new Form.HForm({
+      srcNode : '#J_Form'
+    });
+    form.render();
+    var field = form.getField('eduation');
+    form.on('beforesubmit',function(){
+      var records = store.getResult();
+      field.set('value',BUI.JSON.stringify(records));
+    });
+  });
+</script>
+
+<body>
+</html> 

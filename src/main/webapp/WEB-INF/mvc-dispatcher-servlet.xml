@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+	<!-- 本配置文件是工名为mvc-dispatcher的DispatcherServlet使用， 提供其相关的Spring MVC配置 -->
+
+	<!-- 启用Spring基于annotation的DI, 使用户可以在Spring MVC中使用Spring的强大功能。 激活 @Required 
+		@Autowired,JSR 250's @PostConstruct, @PreDestroy and @Resource 等标注 -->
+	<context:annotation-config />
+
+	<!-- DispatcherServlet上下文， 只管理@Controller类型的bean， 忽略其他型的bean, 如@Service -->
+	<context:component-scan base-package="edu.ustc.highfly">
+		<context:include-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+		<context:include-filter type="annotation"
+			expression="org.springframework.web.bind.annotation.ControllerAdvice" />
+	</context:component-scan>
+
+	<!-- HandlerMapping, 无需配置， Spring MVC可以默认启动。 DefaultAnnotationHandlerMapping 
+		annotation-driven HandlerMapping -->
+
+	<!-- 扩充了注解驱动，可以将请求参数绑定到控制器参数 -->
+	<mvc:annotation-driven />
+
+	<!-- 静态资源处理， css， js， imgs -->
+	<mvc:resources mapping="/**" location="/pages/" /> 
+
+
+	<!-- 配置ViewResolver。 可以用多个ViewResolver。 使用order属性排序。 InternalResourceViewResolver放在最后。 -->
+	<!-- velocity配置器-->
+<!--     <bean id="velocityViewResolver" class="org.springframework.web.servlet.view.velocity.VelocityLayoutViewResolver">   -->
+    <bean id="velocityViewResolver" class="org.springframework.web.servlet.view.velocity.VelocityViewResolver" >
+<!--         <property name="suffix" value=".vm"></property> -->
+<!--         <property name="contentType" value="text/html;charset=UTF-8"/> -->
+<!--     </bean> -->
+        
+         <!-- 页面类型 -->  
+        <property name="contentType" value="text/html;charset=UTF-8" />  
+        <!-- 前缀 -->  
+        <property name="prefix" value="" />  
+        <!-- 后缀 -->  
+        <property name="suffix" value=".html" />  
+        
+        <!--第一个匹配的是freemarker的视图解析器，如果匹配不成功，则自动选择order=1的其他解析器-->  
+        <property name="order" value="0" />  
+    </bean>  
+    
+    <bean id="velocityConfigurer" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">  
+        <property name="resourceLoaderPath">  
+            <value>/pages/</value>  
+        </property>  
+        <property name="velocityProperties">  
+            <props>  
+                <prop key="input.encoding">UTF-8</prop>  
+                <prop key="output.encoding">UTF-8</prop>  
+                <prop key="contentType">text/html;charset=UTF-8</prop>  
+            </props>  
+        </property>  
+    </bean>
+	
+    <!--jsp视图解析器 -->  
+    <bean id="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">  
+        <property name="prefix" value="/pages/" />  
+        <property name="suffix" value=".jsp" />  
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />  
+            <property name="order" value="1" />  
+    </bean> 
+
+</beans>

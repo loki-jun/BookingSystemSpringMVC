@@ -1,0 +1,101 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs
+/jquery/1.4.0/jquery.min.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				//$("button").click(function(){
+				$.getJSON("test.json", function(result) {
+					var k = 0; //k用来计算i的个数
+					$.each(result, function(i, item) {
+
+						//i的值为time1,time2,time3等等，item是每个单元的内容，包括id，status，user_id
+						//
+						//    	for (var k=0; k<item.length; k++)
+						//       { $("table").append("<tr>" +
+						//							  			"<th>" + item[k].id + "</th>" + 
+						//							  			"<th>" + item[k].status + "</th>" + 
+						//							  			"<th>" + item[k].user_id + "</th>" +
+						//							  			"</tr>");}
+						if(k == '0') {
+							var tbRow = "<tr><th></th>";
+							for(var j = 1; j <= item.length; j++)
+								tbRow += "<th>" + "羽毛球" + j + "</th>";
+							tbRow += "</tr>";
+							$("table").append(tbRow);
+
+							//	        var time = 8;
+							// 					time += k;
+							//					var tbRow = "<tr><th>" + time + ":00-" + (time+1) + ":00" + "</th>";
+							var tbRow = "<tr><th>" + i + "</th>";
+							for(var j = 1; j <= item.length; j++) {
+								var color1 = "Gainsboro" //已过期
+								var color2 = "yellow" //已占用
+								var type_insert = "checkbox"
+								var name_insert = "time_venuesid"
+								if(item[j - 1].status == "0") {
+									tbRow += "<td bgcolor=" + color1 + "></td>";
+								} else if(item[j - 1].status == "1") {
+									tbRow += "<td bgcolor=" + color2 + "></td>";
+								} else {
+									tbRow += "<td><input type=" + type_insert + " name=" + name_insert + " value=" + i +  "_" + item[j-1].id + " /></td>";
+									
+								}
+							}
+							tbRow += "</tr>";
+							$("table").append(tbRow);
+							k++;
+
+						} else {
+							//	        var time = 8;
+							// 					time += k;
+							//					var tbRow = "<tr><th>" + time + ":00-" + (time+1) + ":00" + "</th>";
+							var tbRow = "<tr><th>" + i + "</th>";
+							for(var j = 1; j <= item.length; j++) {
+								var color1 = "Gainsboro" //已过期
+								var color2 = "yellow" //已占用
+								var type_insert = "checkbox"
+								var name_insert = "time_venuesid"
+								if(item[j - 1].status == "0") {
+									tbRow += "<td bgcolor=" + color1 + "></td>";
+								} else if(item[j - 1].status == "1") {
+									tbRow += "<td bgcolor=" + color2 + "></td>";
+								} else {
+									tbRow += "<td><input type=" + type_insert + " name=" + name_insert + " value=" + i  + "_" + item[j-1].id + " /></td>";
+								    
+								}
+							}
+							tbRow += "</tr>";
+							$("table").append(tbRow);
+							k++;
+						}
+
+					});
+				});
+				//  });
+			});
+		</script>
+	</head>
+
+	<body>
+		<div>	
+			<strong>搜索结果：</strong>
+		</div>
+		<br>
+		<div>
+			注：<span style="border:thin solid black; background:yellow">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;为已被占用场地&nbsp;&nbsp;
+			<span style="border:thin solid black; background:Gainsboro">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;为已过期场地&nbsp;&nbsp;
+			<span style="border:thin solid black; background:white">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;为可预约场地
+		</div>
+		<br>
+		<form action="#" method="post">
+			<table width="50%" border="1" cellpadding="10" cellspacing="0">
+			</table><br>
+			<input type="submit" value="预约场地" />
+		</form>
+		
+	</body>
+
+</html>
