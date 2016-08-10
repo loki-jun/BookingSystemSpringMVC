@@ -25,7 +25,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <span class="lp-title-port">USTC</span><span class="dl-title-text">羽毛球场地预约</span></div>
     <div class="dl-log">欢迎您，
     <span class="dl-log-user">
-    	<%=request.getAttribute("user_mail") %>
+    	<%=session.getAttribute("email") %>
     </span>
     <a href="###" title="退出系统" class="dl-log-quit">[退出]</a>
     </div>
