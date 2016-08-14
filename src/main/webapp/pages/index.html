@@ -8,7 +8,7 @@
 		<meta name="description" content="User login page" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
         
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.0/jquery.min.js"></script>
+        	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.0/jquery.min.js"></script>
         
 		<!-- bootstrap & fontawesome -->
 		<link rel="stylesheet" href="assets/css/bootstrap.min.css" />
@@ -178,6 +178,34 @@
 				}
 			});
 		});
+	</script>
+	
+	<!-- 验证邮箱格式 -->
+	<script type="text/javascript">
+		$(document).ready(function() {
+
+			$("#email1").focus(function() {
+				$(this).parent().css('border-color', '#4DAFE4');
+				$(".box_email .info").css("color", "#4DAFE4").text("请输入校内邮箱！");
+			});
+			$("#email1").blur(function() {
+				var temp = $(this).val();
+				if(temp.length == 0) {
+					$(this).parent().css('border-color', 'red');
+					$(".box_email .info").css("color", "red").text("请输入校内邮箱！");
+				} else {
+					var email = $("#email1").val();
+					if(email.match(/.*@(mail\.|)ustc\.edu\.cn/)) {
+						$(this).parent().css('border-color', '#14BC3E');
+						$(".box_email .info").css("color", "#14BC3E").text("邮箱格式正确！");
+					} else {
+						$(this).parent().css('border-color', 'red');
+						$(".box_email .info").css("color", "red").text("邮箱格式不正确！");
+					}
+				}
+			})
+
+		})
 	</script>
                                                     
 
@@ -384,12 +412,15 @@
 
 											<form method="post" action="/BookingSystemSpringMVC/Register">
 												<fieldset>
-													<label class="block clearfix">
-														<span class="block input-icon input-icon-right">
-															<input type="email" class="form-control" name="email" value="" placeholder="USTC Email"/>
-															<i class="ace-icon fa fa-envelope"></i>
-														</span>
-													</label>
+													<div class="box_email">
+														<label class="block clearfix">
+															<span class="block input-icon input-icon-right">
+																<input id="email1" type="email" class="form-control" name="email" value="" placeholder="USTC Email"/>
+																<i class="ace-icon fa fa-envelope"></i>
+															</span>
+														</label>
+														<div class="info"></div>
+													</div>
                                                     <!--
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
@@ -402,17 +433,17 @@
 													<div class="box_2">	
 														<label class="block clearfix">
 															<span class="block input-icon input-icon-right">
-																<input id="pw" type="password" class="form-control" name="password" placeholder="password" autocomplete="off" maxlength="16" tabindex="2" />
+																<input id="pw" type="password" class="form-control" name="password" value="" placeholder="password" autocomplete="off" maxlength="16" tabindex="2" />
 																<i class="ace-icon fa fa-lock"></i>
 															</span>
 														</label>
 														<div class="info"></div>
 													</div>
 
-                                                    <div class="box_3">
+                                                    							<div class="box_3">
 														<label class="block clearfix">
 															<span class="block input-icon input-icon-right">
-																<input id="apw" type="password" class="form-control" name="password" placeholder="repassword" autocomplete="off" maxlength="16" tabindex="3"/>
+																<input id="apw" type="password" class="form-control" name="password" value="" placeholder="repassword" autocomplete="off" maxlength="16" tabindex="3"/>
 																<i class="ace-icon fa fa-retweet"></i>
 															</span>
 														</label>
